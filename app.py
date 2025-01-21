@@ -9,7 +9,7 @@ def homepage():
     return """
     <h1>Hello Anuja!</h1>
     <p>It is currently {time}.</p>
-
+    <h6>Get started with your first App</h6>
     <img src="http://loremflickr.com/600/400" />
     """.format(time=the_time)
 
