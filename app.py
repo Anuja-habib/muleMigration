@@ -1,18 +1,23 @@
-from flask import Flask
-from datetime import datetime
+from flask import Flask, request
+from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
-@app.route('/')
-def homepage():
-    the_time = datetime.now().strftime("%A, %d %b %Y %l:%M %p")
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return {'error': 'No file part'}, 400
+    print("files being uploaded")
+    file = request.files['file']
 
-    return """
-    <h1>Hello Anuja!</h1>
-    <p>It is currently {time}.</p>
-    <h6>Get started with your first App</h6>
-    <img src="http://loremflickr.com/600/400" />
-    """.format(time=the_time)
+    if file.filename == '':
+        return {'error': 'No file selected'}, 400
 
+    filename = secure_filename(file.filename)
+    filepath = 'files/' + filename  # Replace with your desired path
+
+    file.save(filepath)
+
+    return {'message': 'File uploaded successfully!'}, 200
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
 
